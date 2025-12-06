@@ -6,8 +6,11 @@
     <RootNamespace>linux_ssh_security_check</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <PublishAot>true</PublishAot>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- PublishAot requires building on target platform for cross-platform scenarios -->
+    <!-- Set to false to enable cross-compilation from Windows to Linux -->
+    <!-- To enable AOT, build on Linux or use condition: Condition="'$(OS)' == 'Unix'" -->
+    <PublishAot>false</PublishAot>
+    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>

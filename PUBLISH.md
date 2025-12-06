@@ -51,11 +51,33 @@ This guide covers all methods to publish the SSH Security Check application for 
    dotnet build --version
    ```
 
+### Important: Cross-Platform Publishing from Windows
+
+**Note:** When publishing from Windows to Linux, you cannot use Native AOT (single-file self-contained with ReadyToRun). You have two options:
+
+#### Option 1: Use Framework-Dependent or Regular Self-Contained (Recommended)
+
+```powershell
+# This works from Windows to Linux
+dotnet publish -c Release -r linux-x64 --self-contained true
+```
+
+#### Option 2: Build on Linux or Use WSL/Docker
+
+For single-file native builds, use one of these:
+- Build directly on a Linux machine
+- Use WSL (Windows Subsystem for Linux)
+- Use Docker container for building
+
 ### Workspace Preparation
 
 1. **Navigate to project directory:**
-   ```bash
+   ```powershell
+   # Windows
    cd D:\P_Bikiran\linux-ssh-security-check\
+   
+   # Linux
+   cd /path/to/linux-ssh-security-check
    ```
 
 2. **Clean previous builds:**
@@ -90,29 +112,40 @@ This guide covers all methods to publish the SSH Security Check application for 
 - Larger file size (~65 MB)
 - Separate builds needed for each platform
 
+**Important:** When building from Windows for Linux, use this method (not single-file with ReadyToRun).
+
 #### Linux x64 (Most Common)
 
-```bash
-dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=false
+```powershell
+# Windows PowerShell
+dotnet publish -c Release -r linux-x64 --self-contained true -o publish/linux-x64
+
+# Linux/macOS
+dotnet publish -c Release -r linux-x64 --self-contained true -o publish/linux-x64
 ```
 
-**Output:** `bin\Release\net10.0\linux-x64\publish\`
+**Output:** `publish\linux-x64\` or `publish/linux-x64/`
+
+**Files Created:**
+- `linux-ssh-security-check` (main executable)
+- `linux-ssh-security-check.dll`
+- Various runtime DLLs
 
 #### Linux ARM64 (Raspberry Pi, etc.)
 
-```bash
-dotnet publish -c Release -r linux-arm64 --self-contained true -p:PublishSingleFile=false
+```powershell
+dotnet publish -c Release -r linux-arm64 --self-contained true -o publish/linux-arm64
 ```
 
-**Output:** `bin\Release\net10.0\linux-arm64\publish\`
+**Output:** `publish\linux-arm64\` or `publish/linux-arm64/`
 
 #### Linux ARM (32-bit)
 
-```bash
-dotnet publish -c Release -r linux-arm --self-contained true -p:PublishSingleFile=false
+```powershell
+dotnet publish -c Release -r linux-arm --self-contained true -o publish/linux-arm
 ```
 
-**Output:** `bin\Release\net10.0\linux-arm\publish\`
+**Output:** `publish\linux-arm\` or `publish/linux-arm/`
 
 ---
 
@@ -167,19 +200,100 @@ sudo apt-get install -y dotnet-runtime-10.0
 **Disadvantages:**
 - Larger file size (~65 MB)
 - Slower first startup (extracts to temp)
+- **Cannot be built from Windows to Linux** (requires building on Linux/WSL/Docker)
 
-#### Linux x64 Single-File
+#### Building Single-File from Windows
 
-```bash
-dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+**Important:** Cross-OS single-file native compilation is not supported from Windows.
+
+**Solution 1: Use WSL (Windows Subsystem for Linux)**
+
+```powershell
+# Install WSL if not already installed
+wsl --install
+
+# Enter WSL
+wsl
+
+# Install .NET in WSL
+wget https://dot.net/v1/dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --channel 10.0
+
+# Add to PATH
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+source ~/.bashrc
+
+# Navigate to project (Windows drives are mounted at /mnt/)
+cd /mnt/d/P_Bikiran/linux-ssh-security-check
+
+# Build single-file
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -p:IncludeNativeLibrariesForSelfExtract=true \
+  -o publish/linux-x64
 ```
 
-**Output:** `bin\Release\net10.0\linux-x64\publish\linux-ssh-security-check`
+**Solution 2: Use Docker**
 
-#### Linux ARM64 Single-File
+Create a `Dockerfile.publish`:
+
+```dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet restore
+RUN dotnet publish -c Release -r linux-x64 --self-contained true \
+    -p:PublishSingleFile=true \
+    -p:IncludeNativeLibrariesForSelfExtract=true \
+    -o /app/publish
+
+FROM scratch AS export
+COPY --from=build /app/publish /
+```
+
+Build with Docker:
+
+```powershell
+# Build and extract
+docker build --target=export --output=publish/linux-x64 -f Dockerfile.publish .
+```
+
+**Solution 3: Use Regular Self-Contained (No Single-File)**
+
+This works from Windows and produces a folder with multiple files:
+
+```powershell
+# This works from Windows!
+dotnet publish -c Release -r linux-x64 --self-contained true -o publish/linux-x64
+```
+
+Then package the entire folder:
+
+```powershell
+# Create a tarball for distribution
+tar -czf linux-ssh-security-check-linux-x64.tar.gz -C publish/linux-x64 .
+```
+
+#### Linux x64 Single-File (On Linux/WSL)
 
 ```bash
-dotnet publish -c Release -r linux-arm64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -p:IncludeNativeLibrariesForSelfExtract=true \
+  -o publish/linux-x64
+```
+
+**Output:** `publish/linux-x64/linux-ssh-security-check` (single executable)
+
+#### Linux ARM64 Single-File (On Linux/WSL)
+
+```bash
+dotnet publish -c Release -r linux-arm64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -p:IncludeNativeLibrariesForSelfExtract=true \
+  -o publish/linux-arm64
 ```
 
 ---
@@ -196,14 +310,31 @@ dotnet publish -c Release -r linux-arm64 --self-contained true -p:PublishSingleF
 **Disadvantages:**
 - Requires testing (may break reflection)
 - Longer build time
+- **Cannot be built from Windows to Linux with single-file** (requires Linux/WSL/Docker)
 
-#### Linux x64 Trimmed
+#### Linux x64 Trimmed (From Linux/WSL)
 
 ```bash
-dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -p:TrimMode=link
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -p:PublishTrimmed=true \
+  -p:TrimMode=link \
+  -o publish/linux-x64
 ```
 
-**Output:** `bin\Release\net10.0\linux-x64\publish\linux-ssh-security-check`
+**Output:** `publish/linux-x64/linux-ssh-security-check`
+
+#### Linux x64 Trimmed (From Windows - Multi-File)
+
+```powershell
+# This works from Windows - produces folder with trimmed files
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishTrimmed=true \
+  -p:TrimMode=link \
+  -o publish/linux-x64
+```
+
+**Output:** `publish\linux-x64\` (folder with multiple files)
 
 ---
 
@@ -630,7 +761,99 @@ ldd linux-ssh-security-check.dll
 
 ### Common Issues
 
-#### Issue 1: "Permission denied" when running
+#### Issue 1: Cross-OS Native Compilation Error
+
+**Problem:**
+```
+error Cross-OS native compilation is not supported.
+```
+
+**Full Error Context:**
+```
+C:\Users\[user]\.nuget\packages\microsoft.dotnet.ilcompiler\10.0.0\build\Microsoft.NETCore.Native.Publish.targets(60,5): 
+error Cross-OS native compilation is not supported.
+```
+
+**Cause:** You're trying to build a single-file native executable from Windows for Linux.
+
+**Solutions:**
+
+**Solution A: Use Regular Self-Contained (Recommended for Windows)**
+
+This produces a folder with multiple files but works from Windows:
+
+```powershell
+# Clean previous builds
+dotnet clean
+
+# Publish without single-file flag
+dotnet publish -c Release -r linux-x64 --self-contained true -o publish/linux-x64
+
+# Package for distribution
+tar -czf linux-ssh-security-check-linux-x64.tar.gz -C publish/linux-x64 .
+```
+
+**Solution B: Use WSL (Windows Subsystem for Linux)**
+
+```powershell
+# Install WSL
+wsl --install
+
+# Enter WSL
+wsl
+
+# Install .NET in WSL
+cd ~
+wget https://dot.net/v1/dotnet-install.sh
+chmod +x dotnet-install.sh
+./dotnet-install.sh --channel 10.0
+
+# Update PATH
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+source ~/.bashrc
+
+# Navigate to your project
+cd /mnt/d/P_Bikiran/linux-ssh-security-check
+
+# Build single-file
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -o publish/linux-x64
+```
+
+**Solution C: Use Docker**
+
+Create `Dockerfile.publish`:
+
+```dockerfile
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+COPY ["linux-ssh-security-check.csproj", "./"]
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -r linux-x64 --self-contained true \
+    -p:PublishSingleFile=true \
+    -p:IncludeNativeLibrariesForSelfExtract=true \
+    -o /app/publish
+
+FROM scratch AS export
+COPY --from=build /app/publish /
+```
+
+Build:
+
+```powershell
+docker build --target=export --output=publish/linux-x64 -f Dockerfile.publish .
+```
+
+**Solution D: Build on Linux VM**
+
+Use a Linux VM (VirtualBox, VMware, Hyper-V) or cloud instance to build.
+
+---
+
+#### Issue 2: "Permission denied" when running
 
 **Problem:**
 ```bash
@@ -645,7 +868,7 @@ chmod +x linux-ssh-security-check
 
 ---
 
-#### Issue 2: Missing .NET runtime (framework-dependent)
+#### Issue 3: Missing .NET runtime (framework-dependent)
 
 **Problem:**
 ```
@@ -662,7 +885,7 @@ sudo ./dotnet-install.sh --channel 10.0 --runtime dotnet
 
 ---
 
-#### Issue 3: Large binary size
+#### Issue 4: Large binary size
 
 **Problem:** Self-contained binary is 100+ MB
 
@@ -676,7 +899,7 @@ dotnet publish -c Release -r linux-x64 --self-contained true \
 
 ---
 
-#### Issue 4: Trimmed binary crashes
+#### Issue 5: Trimmed binary crashes
 
 **Problem:** Application crashes or features don't work after trimming
 
@@ -686,21 +909,6 @@ dotnet publish -c Release -r linux-x64 --self-contained true \
 <ItemGroup>
   <TrimmerRootAssembly Include="System.Text.RegularExpressions" />
 </ItemGroup>
-```
-
----
-
-#### Issue 5: Cross-compilation errors
-
-**Problem:** Building on Windows for Linux fails
-
-**Solution:** Ensure you have the correct SDK and workloads:
-```bash
-# Check installed workloads
-dotnet workload list
-
-# Install if missing
-dotnet workload install linux-x64
 ```
 
 ---
@@ -742,21 +950,60 @@ Use this checklist before distributing:
 
 ### Common Publish Commands
 
-```bash
-# Single-file, self-contained (RECOMMENDED)
-dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+**From Windows (Recommended):**
 
-# Trimmed for size optimization
-dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true -p:TrimMode=link
+```powershell
+# Self-contained multi-file (works from Windows)
+dotnet publish -c Release -r linux-x64 --self-contained true -o publish/linux-x64
+
+# Trimmed for size (multi-file, works from Windows)
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishTrimmed=true \
+  -p:TrimMode=link \
+  -o publish/linux-x64
+
+# Framework-dependent (smallest, requires .NET on target)
+dotnet publish -c Release -r linux-x64 --self-contained false -o publish/linux-x64
+
+# Package the output
+tar -czf linux-ssh-security-check.tar.gz -C publish/linux-x64 .
+```
+
+**From Linux or WSL (All Options Available):**
+
+```bash
+# Single-file, self-contained (RECOMMENDED for Linux builds)
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -p:IncludeNativeLibrariesForSelfExtract=true \
+  -o publish/linux-x64
+
+# Trimmed single-file for size optimization
+dotnet publish -c Release -r linux-x64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -p:PublishTrimmed=true \
+  -p:TrimMode=link \
+  -o publish/linux-x64
 
 # Framework-dependent (requires .NET on target)
-dotnet publish -c Release --self-contained false
+dotnet publish -c Release --self-contained false -o publish/linux-x64
 
 # ARM64 (Raspberry Pi, ARM servers)
-dotnet publish -c Release -r linux-arm64 --self-contained true -p:PublishSingleFile=true
+dotnet publish -c Release -r linux-arm64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -o publish/linux-arm64
 
 # Alpine Linux (musl)
-dotnet publish -c Release -r linux-musl-x64 --self-contained true -p:PublishSingleFile=true
+dotnet publish -c Release -r linux-musl-x64 --self-contained true \
+  -p:PublishSingleFile=true \
+  -o publish/linux-musl-x64
+```
+
+**Using Docker (From any OS):**
+
+```powershell
+# Build using Docker (produces single-file)
+docker build --target=export --output=publish/linux-x64 -f Dockerfile.publish .
 ```
 
 ### Runtime Identifiers (RID)

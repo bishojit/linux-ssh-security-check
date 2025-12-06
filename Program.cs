@@ -796,18 +796,32 @@ internal class SshSecurityChecker
         try
         {
             var fileInfo = new FileInfo(_configPath);
-            var unixFileMode = File.GetUnixFileMode(_configPath);
             
-            // Config file should be readable by root only (0600 or 0644)
-            var isSecure = !unixFileMode.HasFlag(UnixFileMode.OtherWrite);
+            // Only check Unix file mode on Linux
+            if (OperatingSystem.IsLinux())
+            {
+                var unixFileMode = File.GetUnixFileMode(_configPath);
+                
+                // Config file should be readable by root only (0600 or 0644)
+                var isSecure = !unixFileMode.HasFlag(UnixFileMode.OtherWrite);
 
+                return new SecurityCheck
+                {
+                    Name = "Config File Permissions",
+                    Description = "SSH config file should not be world-writable",
+                    Status = isSecure ? CheckStatus.Pass : CheckStatus.Fail,
+                    Details = $"File permissions: {Convert.ToString((int)unixFileMode, 8)}",
+                    Recommendation = "Run: sudo chmod 644 /etc/ssh/sshd_config"
+                };
+            }
+            
             return new SecurityCheck
             {
                 Name = "Config File Permissions",
-                Description = "SSH config file should not be world-writable",
-                Status = isSecure ? CheckStatus.Pass : CheckStatus.Fail,
-                Details = $"File permissions: {Convert.ToString((int)unixFileMode, 8)}",
-                Recommendation = "Run: sudo chmod 644 /etc/ssh/sshd_config"
+                Description = "File permission check skipped (not on Linux)",
+                Status = CheckStatus.Warning,
+                Details = "This check only runs on Linux systems",
+                Recommendation = "Deploy to Linux to verify file permissions"
             };
         }
         catch
@@ -830,6 +844,19 @@ internal class SshSecurityChecker
     {
         try
         {
+            // Only check on Linux
+            if (!OperatingSystem.IsLinux())
+            {
+                return new SecurityCheck
+                {
+                    Name = "Private Key Permissions",
+                    Description = "File permission check skipped (not on Linux)",
+                    Status = CheckStatus.Warning,
+                    Details = "This check only runs on Linux systems",
+                    Recommendation = "Deploy to Linux to verify key file permissions"
+                };
+            }
+            
             var keyFiles = new[] { "/etc/ssh/ssh_host_rsa_key", "/etc/ssh/ssh_host_ed25519_key" };
             var issues = new List<string>();
 
