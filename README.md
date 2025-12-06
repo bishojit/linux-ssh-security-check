@@ -15,7 +15,7 @@ This application performs automated security audits of SSH (Secure Shell) config
 - ????? **[Development Guide](Docs/DEVELOPMENT_GUIDE.md)** - Contributing and extending
 - ?? **[Changelog](Docs/CHANGELOG.md)** - Version history and updates
 - ?? **[Project Summary](Docs/PROJECT_SUMMARY.md)** - Project overview
-- ?? **[Publishing Guide](PUBLISH.md)** - Build and distribution instructions
+- ?? **[Publishing Guide](Docs/PUBLISH.md)** - Build and distribution instructions
 - ??? **[Interactive Remediation](Docs/INTERACTIVE_REMEDIATION.md)** - Auto-fix security issues
 
 **Configuration:**
@@ -400,7 +400,7 @@ Program.cs        # Application entry point
 - ? **Maintainable**: Easy to find and modify specific functionality
 - ? **Extensible**: Simple to add new checks or features
 
-**For complete architecture details, see [ARCHITECTURE.md](ARCHITECTURE.md)**
+**For complete architecture details, see [ARCHITECTURE.md](Docs/ARCHITECTURE.md)**
 
 ### Technology Stack
 

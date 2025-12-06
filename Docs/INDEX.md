@@ -2,6 +2,8 @@
 
 Welcome to the SSH Security Check application! This index will help you find the right documentation for your needs.
 
+**Version**: 2.1.0 | **Last Updated**: 2024-12-06 | **Status**: Production Ready
+
 ---
 
 ## ?? Quick Navigation
@@ -10,11 +12,13 @@ Welcome to the SSH Security Check application! This index will help you find the
 
 - **[Get started quickly](#-quick-start)** ? [QUICK_START.md](QUICK_START.md)
 - **[Understand all features](#-user-guide)** ? [../README.md](../README.md)
+- **[Fix issues automatically](#-interactive-remediation)** ? [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md) ??
 - **[Learn technical details](#-technical-documentation)** ? [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md)
+- **[Understand the architecture](#-architecture)** ? [ARCHITECTURE.md](ARCHITECTURE.md) ??
 - **[Contribute or extend](#-development)** ? [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)
 - **[See version history](#-changelog)** ? [CHANGELOG.md](CHANGELOG.md)
 - **[Get project overview](#-project-summary)** ? [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)
-- **[Publish and distribute](#-publishing-guide)** ? [../PUBLISH.md](../PUBLISH.md)
+- **[Publish and distribute](#-publishing-guide)** ? [PUBLISH.md](PUBLISH.md)
 - **[Use secure SSH config](#-configuration-example)** ? [../sshd_config.secure.example](../sshd_config.secure.example)
 
 ---
@@ -42,7 +46,7 @@ Welcome to the SSH Security Check application! This index will help you find the
 ---
 
 ### ?? User Guide
-**File**: [../README.md](../README.md) (~4,000 words)
+**File**: [../README.md](../README.md) (~5,000 words)
 
 **For**: Anyone using the application
 
@@ -50,6 +54,7 @@ Welcome to the SSH Security Check application! This index will help you find the
 - Complete feature overview
 - Installation instructions
 - Usage examples with all options
+- Interactive remediation guide
 - 23+ security checks explained
 - SSH configuration best practices
 - SSH key setup guide
@@ -62,6 +67,34 @@ Welcome to the SSH Security Check application! This index will help you find the
 - Learning about SSH security
 - Comprehensive usage guide
 - Reference for all features
+
+---
+
+### ??? Interactive Remediation Guide ??
+**File**: [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md) (~600 lines)
+
+**For**: Users who want to automatically fix security issues
+
+**Contents**:
+- Interactive fix mode overview
+- 18 auto-fixable security checks
+- Step-by-step usage guide
+- Safety features and best practices
+- Backup and rollback procedures
+- Troubleshooting
+- Advanced examples
+
+**When to use**:
+- Want to automatically fix security issues
+- Need guided remediation process
+- Require safe configuration updates
+- Want automatic backup creation
+
+**Key Features**:
+- ? User-prompted fixes
+- ? Automatic backups
+- ? Safe rollback
+- ? Clear instructions
 
 ---
 
@@ -86,6 +119,35 @@ Welcome to the SSH Security Check application! This index will help you find the
 - Integrating with other systems
 - Performance optimization
 - Creating automated workflows
+
+---
+
+### ??? Architecture Guide ??
+**File**: [ARCHITECTURE.md](ARCHITECTURE.md) (~200 lines)
+
+**For**: Developers and contributors
+
+**Contents**:
+- Modular architecture overview
+- Project structure explanation
+- Design principles (SOLID, DIP, SRP)
+- Benefits of modular design
+- Adding new features guide
+- Testing strategy
+- Code organization patterns
+
+**When to use**:
+- Understanding the codebase structure
+- Contributing to the project
+- Adding new check modules
+- Extending functionality
+- Code reviews
+
+**Key Highlights**:
+- 16 focused modules
+- 83 lines average file size
+- Highly testable architecture
+- Clear separation of concerns
 
 ---
 
@@ -138,13 +200,14 @@ Welcome to the SSH Security Check application! This index will help you find the
 ---
 
 ### ?? Publishing Guide
-**File**: [../PUBLISH.md](../PUBLISH.md) (~6,000 words)
+**File**: [PUBLISH.md](PUBLISH.md) (~6,000 words)
 
 **For**: Developers and DevOps teams
 
 **Contents**:
 - Publishing methods (self-contained, framework-dependent, single-file)
 - Platform-specific builds (Linux x64, ARM64, Alpine)
+- Windows publishing solutions (WSL, Docker)
 - Optimization and trimming
 - Distribution strategies (GitHub, packages, Docker)
 - Installation instructions for end users
@@ -158,19 +221,26 @@ Welcome to the SSH Security Check application! This index will help you find the
 - Setting up CI/CD pipelines
 - Creating installers
 
+**Updated Features**:
+- ? Windows-to-Linux publishing guide
+- ? WSL setup instructions
+- ? Docker build methods
+- ? Cross-compilation solutions
+
 ---
 
 ### ?? Changelog
-**File**: [CHANGELOG.md](CHANGELOG.md) (~1,000 words)
+**File**: [CHANGELOG.md](CHANGELOG.md) (~400 lines)
 
 **For**: Tracking versions and changes
 
 **Contents**:
-- Version history
-- Release notes
+- Version 2.1.0 - Interactive remediation
+- Version 2.0.0 - Modular architecture
+- Version 1.0.0 - Initial release
 - Planned features
-- Breaking changes
-- Known issues
+- Breaking changes (none!)
+- Migration guides
 - Contributing information
 
 **When to use**:
@@ -178,6 +248,13 @@ Welcome to the SSH Security Check application! This index will help you find the
 - Understanding version differences
 - Planning upgrades
 - Reporting bugs
+- Reviewing feature roadmap
+
+**Recent Updates**:
+- ?? Interactive remediation feature
+- ?? Modular architecture
+- ?? Enhanced documentation
+- ?? Emoji fixes
 
 ---
 
@@ -224,23 +301,28 @@ Welcome to the SSH Security Check application! This index will help you find the
 1. Read [../README.md](../README.md) - Overview section (5 min)
 2. Follow [QUICK_START.md](QUICK_START.md) - Quick Start (10 min)
 3. Run the application (5 min)
-4. Review [../sshd_config.secure.example](../sshd_config.secure.example) (10 min)
+4. Try [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md) (10 min) ??
 
 ### Path 2: System Administrator (1 hour)
 1. Complete New User path (30 min)
 2. Read [../README.md](../README.md) - Configuration Best Practices (15 min)
-3. Read [QUICK_START.md](QUICK_START.md) - Common Issues section (15 min)
+3. Practice with `--fix` mode (15 min) ??
 
 ### Path 3: Developer (2 hours)
 1. Read [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) (15 min)
-2. Read [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md) (45 min)
-3. Read [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md) (30 min)
-4. Review [../Program.cs](../Program.cs) source code (30 min)
+2. Read [ARCHITECTURE.md](ARCHITECTURE.md) (30 min) ??
+3. Read [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md) (45 min)
+4. Review code structure (30 min)
 
-### Path 4: Security Auditor (45 minutes)
+### Path 4: Contributor (3 hours)
+1. Complete Developer path (2 hours)
+2. Read [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md) (45 min)
+3. Set up development environment (15 min)
+
+### Path 5: Security Auditor (45 minutes)
 1. Read [../README.md](../README.md) - Security Checks section (20 min)
 2. Review [../sshd_config.secure.example](../sshd_config.secure.example) (15 min)
-3. Read [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md) - Security Check Details (10 min)
+3. Run security audit (10 min)
 
 ---
 
@@ -250,63 +332,60 @@ Welcome to the SSH Security Check application! This index will help you find the
 - **Basic Installation**: [../README.md](../README.md#-installation)
 - **Quick Start**: [QUICK_START.md](QUICK_START.md#-quick-start-5-minutes)
 - **Requirements**: [../README.md](../README.md#-requirements)
+- **Publishing**: [PUBLISH.md](PUBLISH.md)
 
 ### Usage & Commands
 - **Basic Usage**: [../README.md](../README.md#-usage)
+- **Interactive Fix Mode**: [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md) ??
 - **Command Options**: [QUICK_START.md](QUICK_START.md#-command-reference)
-- **Examples**: [../README.md](../README.md#-usage) & [QUICK_START.md](QUICK_START.md#-advanced-usage-examples)
+- **Examples**: [../README.md](../README.md#-usage)
 
 ### Security Checks
 - **Check List**: [../README.md](../README.md#-security-checks-performed)
 - **Detailed Explanation**: [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#security-check-details)
-- **Check Summary**: [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md#-security-checks-explained)
+- **Auto-Fixable Checks**: [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md#-what-can-be-fixed) ??
 
 ### SSH Configuration
 - **Best Practices**: [../README.md](../README.md#-configuration-best-practices)
 - **Secure Template**: [../sshd_config.secure.example](../sshd_config.secure.example)
 - **Hardening Guide**: [QUICK_START.md](QUICK_START.md#-quick-security-hardening-template)
-- **Parameter Reference**: [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#appendix-ssh-configuration-reference)
+- **Automatic Fixes**: [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md) ??
 
 ### Troubleshooting
 - **Common Issues**: [QUICK_START.md](QUICK_START.md#-common-issues-and-fixes)
 - **Troubleshooting**: [../README.md](../README.md#-troubleshooting)
-- **Development Issues**: [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-common-development-issues)
+- **Fix Mode Issues**: [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md#-troubleshooting) ??
 
 ### Development
-- **Architecture**: [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#architecture-overview)
+- **Architecture**: [ARCHITECTURE.md](ARCHITECTURE.md) ??
 - **Adding Checks**: [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-adding-a-new-security-check)
+- **Modular Design**: [ARCHITECTURE.md](ARCHITECTURE.md#design-principles) ??
 - **Testing**: [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-testing-strategy)
-- **Code Style**: [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-code-style-guidelines)
 - **Contributing**: [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-contributing-guidelines)
 
 ### Publishing & Distribution
-- **Publishing Methods**: [../PUBLISH.md](../PUBLISH.md#publishing-methods)
-- **Platform Builds**: [../PUBLISH.md](../PUBLISH.md#platform-specific-publishing)
-- **Optimization**: [../PUBLISH.md](../PUBLISH.md#trimming-and-optimization)
-- **Distribution**: [../PUBLISH.md](../PUBLISH.md#distribution)
-- **Installation**: [../PUBLISH.md](../PUBLISH.md#installation-instructions)
-
-### Technical Details
-- **Class Documentation**: [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#class-documentation)
-- **API Reference**: [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#class-documentation)
-- **Performance**: [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#performance-considerations)
-- **Extension Points**: [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-extension-points)
+- **Publishing Methods**: [PUBLISH.md](PUBLISH.md#publishing-methods)
+- **Windows Publishing**: [PUBLISH.md](PUBLISH.md#prerequisites) ??
+- **Platform Builds**: [PUBLISH.md](PUBLISH.md#platform-specific-publishing)
+- **Distribution**: [PUBLISH.md](PUBLISH.md#distribution)
 
 ---
 
 ## ?? Documentation Statistics
 
-| File | Words | Lines | Purpose |
-|------|-------|-------|---------|
-| ../README.md | ~4,000 | ~450 | User guide |
-| QUICK_START.md | ~2,500 | ~350 | Quick reference |
-| TECHNICAL_DOCUMENTATION.md | ~5,000 | ~900 | Technical reference |
-| DEVELOPMENT_GUIDE.md | ~3,500 | ~800 | Developer guide |
-| PROJECT_SUMMARY.md | ~2,000 | ~400 | Project overview |
-| CHANGELOG.md | ~1,000 | ~200 | Version history |
-| ../PUBLISH.md | ~6,000 | ~800 | Publishing guide |
-| ../sshd_config.secure.example | ~2,000 | ~300 | Config template |
-| **TOTAL** | **~26,000** | **~4,200** | Complete documentation |
+| File | Words | Lines | Purpose | Status |
+|------|-------|-------|---------|--------|
+| README.md | ~5,000 | ~500 | User guide | ? Updated |
+| QUICK_START.md | ~2,500 | ~350 | Quick reference | ? |
+| INTERACTIVE_REMEDIATION.md | ~2,500 | ~600 | Fix guide | ?? New |
+| ARCHITECTURE.md | ~2,000 | ~200 | Code structure | ?? New |
+| TECHNICAL_DOCUMENTATION.md | ~5,000 | ~900 | Technical reference | ? |
+| DEVELOPMENT_GUIDE.md | ~3,500 | ~800 | Developer guide | ? |
+| PROJECT_SUMMARY.md | ~2,000 | ~400 | Project overview | ? |
+| CHANGELOG.md | ~2,000 | ~400 | Version history | ? Updated |
+| PUBLISH.md | ~6,000 | ~800 | Publishing guide | ? Updated |
+| sshd_config.secure.example | ~2,000 | ~300 | Config template | ? |
+| **TOTAL** | **~32,500** | **~5,250** | Complete documentation | ? |
 
 ---
 
@@ -315,32 +394,32 @@ Welcome to the SSH Security Check application! This index will help you find the
 ### Scenario 1: "I need to check my SSH security NOW"
 ? Go to [QUICK_START.md](QUICK_START.md#step-1-prerequisites-check)
 
-### Scenario 2: "A security check failed, how do I fix it?"
-? Go to [QUICK_START.md](QUICK_START.md#-common-issues-and-fixes)
+### Scenario 2: "A security check failed, how do I fix it automatically?"
+? Go to [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md) ??
 
 ### Scenario 3: "I want to understand what each check does"
 ? Go to [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#security-check-details)
 
-### Scenario 4: "How do I harden my SSH server?"
-? Go to [../sshd_config.secure.example](../sshd_config.secure.example) or [QUICK_START.md](QUICK_START.md#-quick-security-hardening-template)
+### Scenario 4: "How do I harden my SSH server automatically?"
+? Go to [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md#-how-to-use) ??
 
 ### Scenario 5: "I want to add a custom security check"
-? Go to [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-adding-a-new-security-check)
+? Go to [ARCHITECTURE.md](ARCHITECTURE.md#adding-new-features) ??
 
 ### Scenario 6: "How does the scoring system work?"
 ? Go to [../README.md](../README.md#-understanding-security-scores)
 
-### Scenario 7: "What SSH parameters should I configure?"
-? Go to [../sshd_config.secure.example](../sshd_config.secure.example)
+### Scenario 7: "How do I publish this application?"
+? Go to [PUBLISH.md](PUBLISH.md#prerequisites)
 
 ### Scenario 8: "I'm locked out after changing SSH config!"
-? Go to [QUICK_START.md](QUICK_START.md#problem-locked-out-after-config-changes)
+? Go to [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md#-rollback-procedures) ??
 
-### Scenario 9: "Can I automate this in CI/CD?"
-? Go to [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md#integration-with-cicd)
+### Scenario 9: "What's the code structure?"
+? Go to [ARCHITECTURE.md](ARCHITECTURE.md#project-structure) ??
 
-### Scenario 10: "How do I generate a report?"
-? Go to [../README.md](../README.md#generate-report)
+### Scenario 10: "How do I contribute?"
+? Go to [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-contributing-guidelines)
 
 ---
 
@@ -372,17 +451,18 @@ Welcome to the SSH Security Check application! This index will help you find the
 ### Technical Support
 1. Check [QUICK_START.md](QUICK_START.md#-troubleshooting-guide)
 2. Review [../README.md](../README.md#-troubleshooting)
-3. Search [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-common-development-issues)
-4. Open a GitHub issue with details
+3. Try [INTERACTIVE_REMEDIATION.md](INTERACTIVE_REMEDIATION.md#-troubleshooting) ??
+4. Search [DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md#-common-development-issues)
+5. Open a GitHub issue with details
 
 ### Feature Requests
 1. Check [CHANGELOG.md](CHANGELOG.md#unreleased) for planned features
-2. Review [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md) for extension points
+2. Review [ARCHITECTURE.md](ARCHITECTURE.md) for extension points ??
 3. Submit a feature request on GitHub
 
 ---
 
-## ?? Documentation Checklist
+## ? Documentation Checklist
 
 Use this checklist to ensure you have the information you need:
 
@@ -390,42 +470,27 @@ Use this checklist to ensure you have the information you need:
 - [ ] Prerequisites verified
 - [ ] Application built successfully
 - [ ] First run completed
+- [ ] Interactive fix mode tested ??
 
 **Understanding the Tool**
 - [ ] Read feature overview
 - [ ] Understand security checks
 - [ ] Know how to interpret results
+- [ ] Familiar with auto-fix capability ??
 
 **Using the Tool**
 - [ ] Know basic commands
 - [ ] Can generate reports
 - [ ] Understand command-line options
+- [ ] Can use `--fix` mode safely ??
 
 **SSH Security**
 - [ ] Understand SSH hardening
 - [ ] Know which settings to change
 - [ ] Have backup plan before changes
+- [ ] Know rollback procedures ??
 
 **Advanced Usage**
 - [ ] Can add custom checks (if needed)
 - [ ] Know how to integrate with CI/CD (if needed)
-- [ ] Understand performance considerations (if needed)
-
----
-
-## ?? Ready to Begin?
-
-**For most users**: Start with [QUICK_START.md](QUICK_START.md)
-
-**For full understanding**: Start with [../README.md](../README.md)
-
-**For development**: Start with [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)
-
----
-
-**Version**: 1.0.0  
-**Total Documentation**: 20,000+ words across 8 files  
-**Last Updated**: 2024  
-**Status**: Complete and Production-Ready
-
-**Happy SSH Security Auditing! ??**
+- [ ] Understand architecture (if contributing) ??
