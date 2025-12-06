@@ -21,6 +21,11 @@ internal class ConfigurationParser
         }
 
         _configContent = await File.ReadAllTextAsync(configPath);
+
+        // todo:debug
+        Console.WriteLine($"+++++++++++++++++++++++++++++++++++++++++++++++");
+        Console.WriteLine(_configContent);
+        Console.WriteLine($"+++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
     /// <summary>

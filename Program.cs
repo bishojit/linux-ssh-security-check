@@ -75,8 +75,9 @@ internal class Program
 
                     if (remediationSuccess)
                     {
-                        Console.WriteLine("\n╔════════════════════════════════════════════════════════════════╗");
-                        Console.WriteLine("║  Run the security check again to verify all issues are fixed  ║");
+                        Console.WriteLine("\n");
+                        Console.WriteLine("╔════════════════════════════════════════════════════════════════╗");
+                        Console.WriteLine("║  Run the security check again to verify all issues are fixed   ║");
                         Console.WriteLine("╚════════════════════════════════════════════════════════════════╝");
                     }
                 }
