@@ -1,0 +1,282 @@
+# SSH Security Check - Secure Configuration Example
+# 
+# This is a reference configuration file that passes all security checks
+# in the SSH Security Check application.
+#
+# Location: /etc/ssh/sshd_config
+# 
+# IMPORTANT: Before applying these changes:
+# 1. Backup your current configuration
+# 2. Ensure you have SSH key-based authentication set up
+# 3. Keep an active SSH session open while testing
+# 4. Test configuration with: sudo sshd -t
+# 5. Restart SSH service: sudo systemctl restart ssh
+#
+# Last Updated: 2024
+# Compliance: Based on CIS Benchmark and NIST guidelines
+# ================================================================
+
+# ================================================================
+# NETWORK SETTINGS
+# ================================================================
+
+# SSH listens on port 22 by default
+# Consider changing to non-standard port for additional security
+Port 22
+
+# Restrict SSH to specific network interfaces (optional)
+#ListenAddress 0.0.0.0
+#ListenAddress ::
+
+# Address family: any, inet (IPv4 only), or inet6 (IPv6 only)
+AddressFamily any
+
+# ================================================================
+# PROTOCOL AND ENCRYPTION
+# ================================================================
+
+# Use only SSH Protocol 2 (Protocol 1 is deprecated)
+# Note: Modern OpenSSH versions default to Protocol 2
+# Protocol 2
+
+# Specify allowed ciphers (strong encryption only)
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+
+# Specify allowed MAC algorithms
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512,hmac-sha2-256
+
+# Specify allowed key exchange algorithms
+KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
+
+# ================================================================
+# AUTHENTICATION SETTINGS
+# ================================================================
+
+# Disable root login completely
+# Alternatives: 'no', 'prohibit-password', 'forced-commands-only', or 'yes'
+PermitRootLogin no
+
+# Enable public key authentication (SSH keys)
+PubkeyAuthentication yes
+
+# Disable password authentication (use keys only)
+PasswordAuthentication no
+
+# Never allow empty passwords
+PermitEmptyPasswords no
+
+# Disable challenge-response authentication
+ChallengeResponseAuthentication no
+
+# Disable keyboard-interactive authentication
+KbdInteractiveAuthentication no
+
+# Disable host-based authentication
+HostbasedAuthentication no
+
+# Ignore .rhosts and .shosts files
+IgnoreRhosts yes
+
+# Ignore user's ~/.ssh/known_hosts for host-based auth
+IgnoreUserKnownHosts yes
+
+# ================================================================
+# ACCESS CONTROL
+# ================================================================
+
+# Maximum number of authentication attempts per connection
+MaxAuthTries 4
+
+# Maximum number of concurrent unauthenticated connections
+MaxStartups 10:30:60
+
+# Time allowed for authentication (in seconds)
+LoginGraceTime 60
+
+# Restrict SSH access to specific users (uncomment and customize)
+# AllowUsers user1 user2 user3
+# AllowGroups sshusers admins
+
+# Deny specific users or groups (alternative to Allow*)
+# DenyUsers baduser1 baduser2
+# DenyGroups noremote
+
+# ================================================================
+# SESSION SETTINGS
+# ================================================================
+
+# Disconnect if no data received from client (in seconds)
+ClientAliveInterval 300
+
+# Number of client alive messages before disconnect
+ClientAliveCountMax 2
+
+# Maximum number of open sessions per connection
+MaxSessions 10
+
+# TCP keep alive messages
+TCPKeepAlive yes
+
+# ================================================================
+# SECURITY FEATURES
+# ================================================================
+
+# Check file modes and ownership before accepting login
+StrictModes yes
+
+# Use PAM for additional authentication and session management
+UsePAM yes
+
+# Prevent users from setting environment variables
+PermitUserEnvironment no
+
+# Disable compression or delay until after authentication
+Compression delayed
+
+# ================================================================
+# FORWARDING AND TUNNELING
+# ================================================================
+
+# Disable X11 forwarding (enable only if needed for GUI apps)
+X11Forwarding no
+
+# If X11 is needed, use these settings:
+# X11Forwarding yes
+# X11DisplayOffset 10
+# X11UseLocalhost yes
+
+# Disable TCP forwarding
+AllowTcpForwarding no
+
+# Disable agent forwarding
+AllowAgentForwarding no
+
+# Disable tunnel device forwarding
+PermitTunnel no
+
+# Disable gateway ports
+GatewayPorts no
+
+# Disable streaming local, remote or dynamic forwarding
+AllowStreamLocalForwarding no
+
+# ================================================================
+# LOGGING
+# ================================================================
+
+# Logging level
+# Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
+SyslogFacility AUTH
+LogLevel INFO
+
+# Log additional information about successful key usage
+# LogLevel VERBOSE
+
+# ================================================================
+# BANNER AND MESSAGES
+# ================================================================
+
+# Display banner before authentication
+# Banner /etc/ssh/banner
+
+# Print /etc/motd when user logs in
+PrintMotd yes
+
+# Print last login information
+PrintLastLog yes
+
+# ================================================================
+# SUBSYSTEMS
+# ================================================================
+
+# SFTP subsystem (required for SFTP file transfers)
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+# For additional SFTP security, use internal-sftp with chroot:
+# Subsystem sftp internal-sftp
+
+# ================================================================
+# ADVANCED SETTINGS
+# ================================================================
+
+# Host keys to use
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Authentication methods that are allowed
+AuthenticationMethods publickey
+
+# Number of bits in server key
+# ServerKeyBits 1024
+
+# Permit opening a login session
+PermitOpen any
+
+# Accept environment variables from client
+# AcceptEnv LANG LC_*
+
+# Permit tty allocation
+PermitTTY yes
+
+# Use reverse DNS lookup for hostname verification
+UseDNS no
+
+# Version string to present to clients
+# VersionAddendum none
+
+# ================================================================
+# MATCH CONDITIONS (Advanced)
+# ================================================================
+
+# Example: Allow specific settings for certain users or groups
+# Match User admin
+#     PermitRootLogin no
+#     AllowTcpForwarding yes
+#
+# Match Group sftponly
+#     ChrootDirectory /home/%u
+#     ForceCommand internal-sftp
+#     AllowTcpForwarding no
+#     X11Forwarding no
+
+# ================================================================
+# NOTES AND RECOMMENDATIONS
+# ================================================================
+
+# 1. BACKUP: Always backup this file before making changes
+#    sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+#
+# 2. TEST: Verify syntax before restarting SSH
+#    sudo sshd -t
+#
+# 3. RESTART: Apply changes
+#    sudo systemctl restart ssh
+#
+# 4. SSH KEYS: Before disabling password auth, ensure:
+#    - You have SSH key pair generated
+#    - Public key is in ~/.ssh/authorized_keys
+#    - You can successfully login with key
+#
+# 5. FIREWALL: Configure firewall to restrict SSH access
+#    sudo ufw allow from 192.168.1.0/24 to any port 22
+#    sudo ufw enable
+#
+# 6. FAIL2BAN: Install fail2ban for intrusion prevention
+#    sudo apt-get install fail2ban
+#
+# 7. MONITOR: Regularly check SSH logs
+#    sudo tail -f /var/log/auth.log
+#
+# 8. UPDATE: Keep SSH server updated
+#    sudo apt-get update && sudo apt-get upgrade openssh-server
+#
+# 9. AUDIT: Run SSH Security Check regularly
+#    sudo dotnet run --verbose
+#
+# 10. COMPLIANCE: Adjust settings based on your organization's
+#     security policy and compliance requirements
+
+# ================================================================
+# END OF CONFIGURATION
+# ================================================================
