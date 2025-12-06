@@ -16,6 +16,7 @@ This application performs automated security audits of SSH (Secure Shell) config
 - ?? **[Changelog](Docs/CHANGELOG.md)** - Version history and updates
 - ?? **[Project Summary](Docs/PROJECT_SUMMARY.md)** - Project overview
 - ?? **[Publishing Guide](PUBLISH.md)** - Build and distribution instructions
+- ??? **[Interactive Remediation](Docs/INTERACTIVE_REMEDIATION.md)** - Auto-fix security issues
 
 **Configuration:**
 - ?? **[Secure SSH Config Example](sshd_config.secure.example)** - Reference configuration
@@ -30,6 +31,7 @@ This application performs automated security audits of SSH (Secure Shell) config
 - **Service Status Validation**: Ensures SSH service is running properly
 - **File Permission Checks**: Validates security of configuration and key files
 - **Security Score**: Overall security rating based on check results
+- **?? Interactive Remediation**: Automatically fix security issues with user prompts and automatic backups
 
 ## ??? Security Checks Performed
 
@@ -111,6 +113,30 @@ Get detailed information about each check:
 sudo dotnet run --verbose
 ```
 
+### Interactive Remediation Mode ??
+
+Automatically fix security issues with interactive prompts:
+
+```bash
+sudo dotnet run --fix
+```
+
+**What it does:**
+1. Shows failed security checks
+2. Prompts you to select which issues to fix
+3. Creates automatic backup of SSH configuration
+4. Applies selected fixes
+5. Provides clear instructions for testing and restart
+
+**Example:**
+```bash
+sudo dotnet run --fix --verbose
+```
+
+**?? Important**: Always keep an active SSH session open when using `--fix` mode.
+
+For complete documentation, see [Interactive Remediation Guide](Docs/INTERACTIVE_REMEDIATION.md).
+
 ### Custom Configuration File
 
 Specify a different SSH configuration file:
@@ -133,6 +159,7 @@ Use multiple options together:
 
 ```bash
 sudo dotnet run --verbose --output report.txt
+sudo dotnet run --fix --verbose --output before-fix.txt
 ```
 
 ### Display Help
@@ -149,6 +176,28 @@ dotnet run --help
 | `--verbose` | `-v` | Enable detailed output with recommendations |
 | `--config <path>` | `-c` | Specify custom SSH config file path |
 | `--output <file>` | `-o` | Save report to specified file |
+| `--fix` | `-f` | ?? Enable interactive remediation mode |
+
+### Interactive Remediation (--fix)
+
+The `--fix` flag enables an interactive mode that helps you automatically fix security issues:
+
+- ? **Safe**: Creates backup before making changes
+- ? **Interactive**: You choose which issues to fix
+- ? **Transparent**: Shows exactly what will be changed
+- ? **Reversible**: Easy rollback with automatic backup
+
+**Example workflow:**
+```bash
+# 1. Check for issues
+sudo dotnet run --verbose
+
+# 2. Fix issues interactively
+sudo dotnet run --fix
+
+# 3. Verify fixes
+sudo sshd -t && sudo dotnet run --verbose
+```
 
 ## ?? Example Output
 
@@ -327,12 +376,31 @@ sudo yum install openssh-server      # CentOS/RHEL
 
 ### Architecture
 
-The application is structured into several key components:
+The application uses a **modular architecture** with clear separation of concerns:
 
-- **Program.cs**: Main entry point and CLI interface
-- **SshSecurityChecker**: Core security validation logic
-- **SecurityCheckResults**: Results aggregation and scoring
-- **SecurityCheck**: Individual check representation
+**?? Project Structure:**
+```
+Models/           # Data models (CommandLineOptions, SecurityCheck, Results)
+Services/         # Infrastructure services (Parsing, Display, Reports)
+Checks/           # Security validation modules (Auth, Network, Session, etc.)
+Core/             # Main orchestrator (SshSecurityChecker)
+Program.cs        # Application entry point
+```
+
+**Key Components:**
+- **Models**: Data structures and enums
+- **Services**: Reusable infrastructure (ArgumentParser, ConfigurationParser, DisplayService, ReportGenerator, SystemService)
+- **Checks**: Security validation modules organized by category (AuthenticationChecks, NetworkChecks, SessionChecks, etc.)
+- **Core**: Main security checker orchestrator
+- **Program.cs**: Minimal entry point (~73 lines)
+
+**Benefits:**
+- ? **Modular**: 16 focused files instead of one monolithic file
+- ? **Testable**: Each module can be unit tested independently
+- ? **Maintainable**: Easy to find and modify specific functionality
+- ? **Extensible**: Simple to add new checks or features
+
+**For complete architecture details, see [ARCHITECTURE.md](ARCHITECTURE.md)**
 
 ### Technology Stack
 
@@ -346,6 +414,7 @@ The application is structured into several key components:
 
 - Comprehensive XML documentation
 - SOLID principles
+- Modular architecture
 - Asynchronous operations where applicable
 - Proper error handling and user feedback
 - Cross-platform Linux compatibility

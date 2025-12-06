@@ -13,8 +13,4 @@
     <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Docs\" />
-  </ItemGroup>
-
 </Project>
