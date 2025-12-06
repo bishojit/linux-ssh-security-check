@@ -28,7 +28,15 @@ internal class ReportGenerator
         foreach (var check in results.Checks)
         {
             var status = check.Status.ToString().ToUpper();
-            await writer.WriteLineAsync($"[{status}] {check.Name}");
+            var statusSymbol = check.Status switch
+            {
+                CheckStatus.Pass => "[PASS]",
+                CheckStatus.Fail => "[FAIL]",
+                CheckStatus.Warning => "[WARN]",
+                _ => "[????]"
+            };
+            
+            await writer.WriteLineAsync($"{statusSymbol} {check.Name}");
             
             if (!string.IsNullOrEmpty(check.Description))
             {
@@ -42,7 +50,7 @@ internal class ReportGenerator
             
             if (!check.Passed && !string.IsNullOrEmpty(check.Recommendation))
             {
-                await writer.WriteLineAsync($"  Recommendation: {check.Recommendation}");
+                await writer.WriteLineAsync($"  >> Recommendation: {check.Recommendation}");
             }
             
             await writer.WriteLineAsync();
@@ -56,6 +64,16 @@ internal class ReportGenerator
         await writer.WriteLineAsync($"  Warnings: {results.Warnings}");
         await writer.WriteLineAsync($"  Security Score: {results.SecurityScore:F1}%");
         await writer.WriteLineAsync();
+        
+        var scoreRating = results.SecurityScore switch
+        {
+            >= 90 => "EXCELLENT - Highly secure configuration",
+            >= 70 => "GOOD - Secure with minor improvements needed",
+            >= 50 => "FAIR - Several security issues to address",
+            _ => "POOR - Critical security vulnerabilities present"
+        };
+        
+        await writer.WriteLineAsync($"  Security Rating: {scoreRating}");
         await writer.WriteLineAsync($"  Overall Status: {(results.AllChecksPassed ? "SECURE" : "NEEDS ATTENTION")}");
     }
 }
