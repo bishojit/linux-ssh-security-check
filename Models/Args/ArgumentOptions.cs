@@ -1,9 +1,9 @@
-namespace SshSecurityCheck.Models;
+namespace linux_ssh_security_check.Models.Args;
 
 /// <summary>
 /// Command line options for the SSH security checker.
 /// </summary>
-internal class CommandLineOptions
+public class ArgumentOptions
 {
     /// <summary>
     /// Gets or sets whether to display help information.

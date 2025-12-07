@@ -1,20 +1,18 @@
-using SshSecurityCheck.Models;
-
-namespace SshSecurityCheck.Services;
+namespace linux_ssh_security_check.Models.Args;
 
 /// <summary>
 /// Service for parsing command line arguments.
 /// </summary>
-internal class ArgumentParser
+public class ArgumentParser
 {
     /// <summary>
     /// Parses command line arguments into an options object.
     /// </summary>
     /// <param name="args">Command line arguments</param>
     /// <returns>Parsed options</returns>
-    public CommandLineOptions Parse(string[] args)
+    public ArgumentOptions Parse(string[] args)
     {
-        var options = new CommandLineOptions();
+        var options = new ArgumentOptions();
 
         for (int i = 0; i < args.Length; i++)
         {

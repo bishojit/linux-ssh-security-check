@@ -1,4 +1,5 @@
-﻿using SshSecurityCheck.Core;
+﻿using linux_ssh_security_check.Models.Args;
+using SshSecurityCheck.Core;
 using SshSecurityCheck.Models;
 using SshSecurityCheck.Services;
 
@@ -25,34 +26,34 @@ internal class Program
         displayService.DisplayHeader();
 
         // Parse command line arguments
-        var options = argumentParser.Parse(args);
+        var argOptions = argumentParser.Parse(args);
         
-        if (options.ShowHelp)
+        if (argOptions.ShowHelp)
         {
             displayService.DisplayHelp();
             return 0;
         }
 
-        var sshConfigPath = options.ConfigPath ?? "/etc/ssh/sshd_config";
+        var sshConfigPath = argOptions.ConfigPath ?? "/etc/ssh/sshd_config";
         var checker = new SshSecurityChecker(sshConfigPath);
 
         try
         {
             // Perform all security checks
-            var results = await checker.RunAllChecksAsync(options.Verbose);
+            var results = await checker.RunAllChecksAsync(argOptions.Verbose);
             
             // Display results
-            displayService.DisplayResults(results, options.Verbose);
+            displayService.DisplayResults(results, argOptions.Verbose);
             
             // Generate report if requested
-            if (!string.IsNullOrEmpty(options.OutputFile))
+            if (!string.IsNullOrEmpty(argOptions.OutputFile))
             {
-                await reportGenerator.GenerateAsync(results, options.OutputFile);
-                displayService.DisplaySuccess($"Report saved to: {options.OutputFile}");
+                await reportGenerator.GenerateAsync(results, argOptions.OutputFile);
+                displayService.DisplaySuccess($"Report saved to: {argOptions.OutputFile}");
             }
 
             // Interactive remediation mode
-            if (options.FixMode)
+            if (argOptions.FixMode)
             {
                 var failedChecks = results.Checks
                     .Where(c => c.Status == CheckStatus.Fail)
@@ -99,7 +100,7 @@ internal class Program
         {
             displayService.DisplayError(ex.Message);
             
-            if (options.Verbose)
+            if (argOptions.Verbose)
             {
                 Console.WriteLine($"\nStack Trace:\n{ex.StackTrace}");
             }

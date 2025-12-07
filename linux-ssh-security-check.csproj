@@ -13,4 +13,8 @@
     <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="publish\" />
+  </ItemGroup>
+
 </Project>
